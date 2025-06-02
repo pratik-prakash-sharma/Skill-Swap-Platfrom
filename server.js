@@ -52,8 +52,8 @@ app.use(session({
 // }
 
 mongoose.connect(process.env.MONGO_URI, { useNewUrlParser: true, useUnifiedTopology: true })
-  .then(() => console.log("MongoDB connected"))
-  .catch(err => console.log(err));
+    .then(() => console.log("MongoDB connected"))
+    .catch(err => console.log(err));
 
 
 
@@ -72,6 +72,9 @@ app.get("/home", async (req, res) => {
 app.get("/user", (req, res) => {
     res.render("login.ejs");
 })
+
+const strongPasswordRegex = /^(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+
 
 // user registration
 
@@ -94,7 +97,7 @@ app.post("/user/register", async (req, res) => {
         }
 
         // Enforce strong password
-        if (!validator.isStrongPassword(password, { minLength: 8, minNumbers: 1, minUppercase: 1, minSymbols: 1 })) {
+        if (!strongPasswordRegex.test(password)) {
             return res.send("Password must be at least 8 characters long, with 1 uppercase letter, 1 number, and 1 special character.");
         }
 
@@ -609,7 +612,7 @@ app.post("/swap/confirm/:id", async (req, res) => {
 // }) imp
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
-  console.log(`Server is running on port ${PORT}`);
+    console.log(`Server is running on port ${PORT}`);
 });
 
 // server.listen(8080, () => {
