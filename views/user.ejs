@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Profile</title>
+    <link rel="stylesheet" href="user.css">
+</head>
+<body>
+    <div class="profile-container">
+        <div class="profile-card">
+            <img src="avatar.jpg" alt="Profile Picture" class="profile-pic">
+            <h2 id="user-name">John Doe</h2>
+            <p id="user-email">johndoe@example.com</p>
+            <p id="user-bio">Web Developer passionate about coding and learning new technologies.</p>
+            <h3>Skills</h3>
+            <ul id="user-skills">
+                <li>JavaScript</li>
+                <li>HTML</li>
+                <li>CSS</li>
+            </ul>
+            <button id="edit-profile">Edit Profile</button>
+        </div>
+    </div>
+    
+    <script>
+        document.getElementById("edit-profile").addEventListener("click", function() {
+            const name = prompt("Enter your name:", document.getElementById("user-name").textContent);
+            const email = prompt("Enter your email:", document.getElementById("user-email").textContent);
+            const bio = prompt("Enter your bio:", document.getElementById("user-bio").textContent);
+            const skills = prompt("Enter your skills (comma separated):", "JavaScript, HTML, CSS");
+            
+            if (name) document.getElementById("user-name").textContent = name;
+            if (email) document.getElementById("user-email").textContent = email;
+            if (bio) document.getElementById("user-bio").textContent = bio;
+            
+            if (skills) {
+                const skillList = document.getElementById("user-skills");
+                skillList.innerHTML = "";
+                skills.split(",").forEach(skill => {
+                    const li = document.createElement("li");
+                    li.textContent = skill.trim();
+                    skillList.appendChild(li);
+                });
+            }
+        });
+    </script>
+</body>
+</html>

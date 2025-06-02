@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Skill Details</title>
+    <style>
+        body {
+            color: white;
+        }
+    </style>
+    <link rel="stylesheet" href="/style.css">
+</head>
+
+<body>
+    <nav class="navbar">
+        <a href="/home" class="nav-link">🏠 Home</a>
+    </nav>
+
+    <div class="skill-container">
+        <h1>
+            <%= skill.title %>
+        </h1>
+        <p><strong>Description:</strong>
+            <%= skill.desc %>
+        </p>
+        <p><strong>Offered by:</strong>
+            <%= skill.user.name %>
+        </p>
+
+        <% if (user) { %>
+            <form method="POST" action="/swap/request">
+                <input type="hidden" name="skillId" value="<%= skill._id %>">
+                <label for="swapSkill">Select your skill to swap:</label>
+                <select name="swapSkill" required>
+                    <% user.skills.forEach(s=> { %>
+                        <option value="<%= s %>">
+                            <%= s %>
+                        </option>
+                        <% }); %>
+                </select>
+                <button type="submit">Request Swap</button>
+            </form>
+            <% } else { %>
+                <p><a href="/user">Login</a> to swap skills.</p>
+                <% } %>
+    </div>
+</body>
+
+</html>

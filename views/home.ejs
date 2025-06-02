@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SkillSwap</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="drop.css">
+</head>
+<body>
+    <!-- <nav class="navbar">
+
+        <div id="logo">
+            <img class="logo-img" src="images/skill.png" alt="">
+            <h2 class="logo-heading">Skill Swap</h2>
+        </div>
+        <ul class="navlist">
+            <li><a href="#hero-section" class="nav-link btn2">Home</a></li>
+            <li><a href="skills.html" class="nav-link">Explore Skills</a></li>
+            <li><a href="/user" target="_blank" class="nav-link">Sign In / Sign Up</a></li>
+        </ul>
+    </nav> -->
+    <nav class="navbar">
+        <div id="logo">
+            <img class="logo-img" src="images/skill.png" alt="">
+            <h2 class="logo-heading">Skill Swap</h2>
+        </div>
+        <ul class="navlist">
+            <li><a href="/home" class="nav-link btn2">Home</a></li>
+            <!-- <li><a href="/home/skills" class="nav-link">Explore Skills</a></li> -->
+    
+            <% if (user) { %>
+                <li class="dropdown">
+                    <a href="#" class="nav-link dropdown-toggle">Welcome, <span class="username"><%= user.name %></span>  ▼</a>
+                    <ul class="dropdown-menu">
+                        <li><a href="/profile" class="dropdown-item">Profile</a></li>
+                        <li>
+                            <form method="POST" action="/user/logout" style="display:inline;">
+                                <button type="submit" class="dropdown-item logout-btn">Logout</button>
+                            </form>
+                        </li>
+                        <!-- <li><a href="/dashboard" class="dropdown-item">Notification</a></li> -->
+                    </ul>               
+                </li>
+            <% } else { %>
+                <li><a href="/user" class="nav-link">Sign In / Sign Up</a></li>
+            <% } %>
+        </ul>
+    </nav>
+    
+    
+    <section id="hero-section">
+        <div class="hero-title">
+            <h1 class="primary-heading">Swap Skills, Grow Together</h1>
+            <p class="primary-pera">Connect with people to exchange skills and learn something new.</p>
+            <% if (user) { %>
+            <a href="/user" target="_blank" class="btn" style="visibility: hidden;">Get Started</a>
+            <% } else { %>
+                <a href="/user" target ="_blank" class="btn">Get Started</a>
+                <% } %>
+        </div>
+    </section>
+    <section id="skill-section">
+        <h1>SKILLS</h1>
+        <div class="skill-container">
+            <% for(let skill of skills) { %>
+            <div class="skill-card">
+                <div class="bg"></div>
+                <div class="blob"></div>
+                <div class="card-detail">
+                    <div class="skill-name">
+                        <h2><%= skill.title %></h2>
+                    </div>
+                    <div class="skill-desc"><p><%= skill.desc %></p></div>
+                    <!-- <div class="btn"><a href="/skill/<%= skill._id %>">Swap</a></div>
+                      -->
+                      <% if (user && String(skill.user._id) === String(user._id)) { %>
+                        <div class="btn disabled">Your Skill</div> <!-- Disabled button -->
+                    <% } else { %>
+                        <div class="btn"><a href="/skill/<%= skill._id %>">Swap</a></div>
+                    <% } %>
+                </div>
+            </div> 
+            <% } %>
+        </div>
+    </section>
+    <footer><p className='footer-p'>&copy; 2025 SkillSwap. All rights reserved.</p></footer>
+</body>
+</html>
+
+
+

@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profile</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="profile.css">
+    <link rel="stylesheet" href="drop.css">
+</head>
+
+<body>
+    <nav class="navbar">
+        <div id="logo">
+            <img class="logo-img" src="images/skill.png" alt="">
+            <h2 class="logo-heading">Skill Swap</h2>
+        </div>
+        <ul class="navlist">
+            <li><a href="/home" class="nav-link btn2">Home</a></li>
+            <!-- <li><a href="/home/skills" class="nav-link">Explore Skills</a></li> -->
+
+            <% if (user) { %>
+                <li class="dropdown">
+                    <a href="#" class="nav-link dropdown-toggle">Welcome, <span class="username">
+                            <%= user.name %>
+                        </span> ▼</a>
+                    <ul class="dropdown-menu">
+                        <li>
+                            <form method="POST" action="/user/logout" style="display:inline;">
+                                <button type="submit" class="dropdown-item logout-btn">Logout</button>
+                            </form>
+                        </li>
+                    </ul>
+                </li>
+                <% } else { %>
+                    <li><a href="/user" class="nav-link">Sign In / Sign Up</a></li>
+                    <% } %>
+        </ul>
+    </nav>
+
+    <div class="profile-container">
+        <div class="profile-card">
+            <!-- <div class="profile-img">
+                <img src="<%= user.profilePic || '/images/default-profile.png' %>" alt="Profile Picture">
+                <form method="POST" action="/profile/upload" enctype="multipart/form-data">
+                    <input type="file" name="profilePic">
+                    <button type="submit">Upload</button>
+                </form>
+            </div> -->
+            <h1 class="name">
+                <%= user.name %>
+            </h1>
+            <p class="bio"><strong>Email:</strong>
+                <%= user.email %>
+            </p>
+            <p class="bio"><strong>Bio:</strong>
+                <%= user.bio || 'No bio added yet' %>
+            </p>
+            <!-- <p><strong>Skills:</strong> <%= user.skills ? user.skills.join(", ") : 'No skills added yet' %></p> -->
+
+            <div class="profile-actions">
+                <a href="/profile/edit" class="btn">Edit Profile</a>
+                <a href="/profile/change-password" class="btn">Change Password</a>
+            </div>
+           
+        </div>
+
+        <!-- <div class="add-skill-section">
+            <h2>Add a New Skill</h2>
+            <form method="POST" action="/profile/add-skill">
+                <input type="text" name="title" placeholder="Skill Title" required />
+                <textarea name="desc" placeholder="Skill Description" required></textarea>
+                <button type="submit">Add Skill</button>
+            </form>
+        </div> -->
+
+        <div class="user-skills">
+            <h2>Your Skills</h2>
+            <% if (userSkills.length===0) { %>
+                <p>You haven't added any skills yet.</p>
+                <% } else { %>
+                    <ul>
+                        <% userSkills.forEach(skill=> { %>
+                            <li>
+                                <strong>
+                                    <%= skill.title %>
+                                </strong>
+                                <form method="POST" action="/profile/delete-skill">
+                                    <input type="hidden" name="skillId" value="<%= skill._id %>">
+                                    <button type="submit">🗑 Delete</button>
+                                </form>
+                            </li>
+                            <% }); %>
+                    </ul>
+                    <% } %>
+                     <a href="/profile/add-skill">Add Skill</a>
+        </div>
+
+        <div class="requests-section">
+            <h2>Pending Swap Requests</h2>
+
+            <h3>Requests You Sent</h3>
+            <% if (sentRequests.length===0) { %>
+                <p>No pending requests.</p>
+                <% } else { %>
+                    <ul>
+                        <% sentRequests.forEach(request=> { %>
+                            <li>
+                                You requested <strong>
+                                    <%= request.requestedSkill.title %>
+                                </strong> from <strong>
+                                    <%= request.receiver.name %>
+                                </strong>
+                                in exchange for <strong>
+                                    <%= request.offeredSkill.title %>
+                                </strong>.
+                                <span class="status">Status: Pending</span>
+                            </li>
+                            <% }); %>
+                    </ul>
+                    <% } %>
+
+                        <h3>Requests You Received</h3>
+                        <% if (receivedRequests.length===0) { %>
+                            <p>No pending requests.</p>
+                            <% } else { %>
+                                <ul>
+                                    <% receivedRequests.forEach(request=> { %>
+                                        <li>
+                                            <strong>
+                                                <%= request.requester.name %>
+                                            </strong> wants to swap
+                                            <strong>
+                                                <%= request.offeredSkill.title %>
+                                            </strong> for
+                                            <strong>
+                                                <%= request.requestedSkill.title %>
+                                            </strong>.
+
+                                            <form method="POST" action="/swap/respond">
+                                                <input type="hidden" name="requestId" value="<%= request._id %>">
+                                                <button type="submit" name="action" value="accept">✅ Accept</button>
+                                                <button type="submit" name="action" value="reject" onclick="deleteRequest('<%= request._id %>')">❌ Reject</button>
+                                            </form>
+                                        </li>
+                                        <% }); %>
+                                    </ul>
+                                    <% } %>
+                                    <form action="/swap/pending" method="GET">
+                                        <button class="btn" type="submit" name="action" value="reject">Pending</button>
+                                    </form>
+                            
+        </div>
+    </div>
+    <h1>Swapped Skills</h1>
+
+<ul>
+    <% swaps.forEach(swap => { %>
+        <li>
+            You swapped <%= swap.offeredSkill.name %> with 
+            <%= swap.requester.username %> for <%= swap.requestedSkill.name %>.
+        </li>
+    <% }); %>
+</ul>
+
+
+<script>
+    function deleteRequest(requestId) {
+        fetch(`/delete-request/${requestId}`, { method: "DELETE" })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    location.reload();
+                }
+            })
+            .catch(error => console.error("Error deleting request:", error));
+    }
+</script>
+
+</body>
+
+</html>

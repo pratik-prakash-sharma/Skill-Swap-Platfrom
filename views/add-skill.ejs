@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Skill</title>
+    <link rel="stylesheet" href="/style.css">
+    <link rel="stylesheet" href="/profile.css">
+    <link rel="stylesheet" href="/drop.css">
+</head>
+
+<body>
+    <nav class="navbar">
+        <div id="logo">
+            <img class="logo-img" src="/images/skill.png" alt="">
+            <h2 class="logo-heading">Skill Swap</h2>
+        </div>
+        <ul class="navlist">
+            <li><a href="/home" class="nav-link btn2">Home</a></li>
+            <!-- <li><a href="/home/skills" class="nav-link">Explore Skills</a></li> -->
+
+            <% if (user) { %>
+                <li class="dropdown">
+                    <a href="#" class="nav-link dropdown-toggle">Welcome, <span class="username"><%= user.name %></span>  ▼</a>
+                    <ul class="dropdown-menu">
+                        <li><a href="/profile" class="dropdown-item">Profile</a></li>
+                        <li>
+                            <form method="POST" action="/user/logout" style="display:inline;">
+                                <button type="submit" class="dropdown-item logout-btn">Logout</button>
+                            </form>
+                        </li>
+                        <!-- <li><a href="/dashboard" class="dropdown-item">Notification</a></li> -->
+                    </ul>               
+                </li>
+            <% } else { %>
+                <li><a href="/user" class="nav-link">Sign In / Sign Up</a></li>
+            <% } %>
+        </ul>
+    </nav>
+    <div class="add-skill-section">
+        <h2>Add a New Skill</h2>
+        <form method="POST" action="/profile/add-skill">
+            <input class="skill-input" type="text" name="title" placeholder="Skill Title" required />
+            <textarea class="skill-input" name="desc" placeholder="Skill Description" required></textarea>
+            <button class="btn" type="submit">Add Skill</button>
+        </form>
+    </div>
+</body>
+
+</html>

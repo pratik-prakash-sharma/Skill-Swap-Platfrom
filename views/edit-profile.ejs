@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Profile</title>
+    <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+    <nav class="navbar">
+        <a href="/profile" class="nav-link">⬅ Back to Profile</a>
+    </nav>
+
+    <div class="profile-container">
+        <form method="POST" action="/profile/edit" class="profile-card">
+            <h1>Edit Profile</h1>
+            <input type="text" name="name" value="<%= user.name %>" required />
+            <textarea name="bio" placeholder="Enter your bio"><%= user.bio || '' %></textarea>
+            <!-- <input type="text" name="skills" value="<%= user.skills ? user.skills.join(', ') : '' %>" placeholder="Enter skills, separated by commas"> -->
+            <button type="submit" class="btn">Save Changes</button>
+        </form>
+    </div>
+</body>
+</html>

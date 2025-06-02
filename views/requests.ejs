@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Swap Requests</title>
+    <style>
+        body{
+            color: white;
+        }
+        </style>
+    <link rel="stylesheet" href="/style.css">
+    <link rel="stylesheet" href="drop.css">
+</head>
+<body>  
+    <nav class="navbar">
+        <a href="/home" class="nav-link">🏠 Home</a>
+    </nav>
+
+    <h1>Incoming Swap Requests</h1>
+
+    <% if (requests.length === 0) { %>
+        <p>No swap requests yet.</p>
+    <% } else { %>
+        <ul>
+            <!-- <% requests.forEach(request => { %>
+                <li>
+                    <strong><%= request.requester.username %></strong> wants to swap 
+                    <strong><%= request.offeredSkill.name %></strong> for your skill 
+                    <strong><%= request.requestedSkill.name %></strong>
+                    <br>
+                    Status: <%= request.status %>
+            
+                    <% if (request.status === "pending") { %>
+                        <form action="/swap/accept/<%= request._id %>" method="POST">
+                            <button type="submit">Accept</button>
+                        </form>
+                        <form action="/swap/reject/<%= request._id %>" method="POST">
+                            <button type="submit">Reject</button>
+                        </form>
+                    <% } else if (request.status === "accepted") { %>
+                        <form action="/send-whatsapp" method="POST">
+                            <input type="hidden" name="requestId" value="<%= request._id %>">
+                            <button type="submit">Send WhatsApp for Meeting</button>
+                        </form>
+                    <% } %>
+                </li>
+            <% }); %> -->
+                
+
+            <% requests.forEach(request => { %>
+                <div>
+                    <strong><%= request.requester ? request.requester.name : "Unknown User" %></strong> 
+                    wants to swap for your skill <%= request.offeredSkill.title %>
+                    <br> Status: <%= request.status %>
+                    <br>
+            
+                    <% if (request.status === "accepted") { %>
+                        <% if (request.requester && request.requester.mobile) { %>
+                            <a href="https://wa.me/<%= request.requester.mobile %>?text=Hello%20<%= request.requester.name %>,%20I%20am%20interested%20in%20swapping%20skills%20with%20you!" 
+                               target="_blank" class="whatsapp-btn" onclick="deleteRequest('<%= request._id %>')">
+                               Message on WhatsApp
+                            </a>
+                        <% } else { %>
+                            <span style="color: red;">Phone number not available</span>
+                        <% } %>
+                    <% } else if (request.status === "rejected") { %>
+                        <span style="color: red; font-weight: bold;">This request was rejected.</span>
+                    <% } else { %>
+                        <span style="color: orange;">Pending...</span>
+                    <% } %>
+                </div>
+            <% }); %>
+            
+            
+        </ul>
+    <% } %>
+    <script>
+        function deleteRequest(requestId) {
+            fetch(`/delete-request/${requestId}`, { method: "DELETE" })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        location.reload(); // Reload page after deletion
+                    }
+                })
+                .catch(error => console.error("Error deleting request:", error));
+        }
+    </script>
+    
+</body>
+</html>

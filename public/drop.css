@@ -1,0 +1,59 @@
+/* Dropdown Menu */
+.dropdown {
+    position: relative;
+    display: inline-block;
+}
+
+.dropdown-toggle {
+    cursor: pointer;
+    position: relative;
+    padding: 10px;
+}
+
+.dropdown-menu {
+    display: none;
+    position: absolute;
+    background-color: white;
+    min-width: 150px;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+    border-radius: 5px;
+    list-style: none;
+    padding: 10px 0;
+    top: 100%;
+    left: 0;
+    z-index: 10;
+}
+
+.dropdown-menu li {
+    padding: 8px 15px;
+}
+
+.dropdown-menu li a,
+.dropdown-menu li button {
+    text-decoration: none;
+    color: black;
+    background: none;
+    border: none;
+    font-size: 16px;
+    cursor: pointer;
+    width: 100%;
+    text-align: left;
+}
+
+.dropdown-menu li:hover {
+    background-color: #3b3a3a;
+}
+
+/* Show dropdown on hover */
+.dropdown:hover .dropdown-menu {
+    display: block;
+}
+
+/* Logout button styling */
+.logout-btn {
+    width: 100%;
+    text-align: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
