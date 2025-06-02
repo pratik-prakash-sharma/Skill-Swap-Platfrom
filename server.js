@@ -5,7 +5,6 @@ const path = require('path');
 const methodOverride = require("method-override");
 const session = require("express-session");
 const bcrypt = require('bcryptjs');
-const validator = require("validator");
 const saltRounds = 10;
 const http = require("http");
 const socketIo = require("socket.io");
@@ -293,8 +292,8 @@ app.post("/profile/change-password", async (req, res) => {
     }
 
     // Enforce strong password
-    if (!validator.isStrongPassword(newPassword, { minLength: 8, minNumbers: 1, minUppercase: 1, minSymbols: 1 })) {
-        return res.send("New password must be at least 8 characters long, with 1 uppercase letter, 1 number, and 1 special character.");
+    if (!strongPasswordRegex.test(password)) {
+        return res.send("Password must be at least 8 characters long, with 1 uppercase letter, 1 number, and 1 special character.");
     }
 
     // Hash and update password
