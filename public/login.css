@@ -183,8 +183,11 @@ button:hover {
     align-items: center;
   }
   
+  form{
+    padding: 0;
+  }
   .form-container, .overlay-container {
-    width: 90%;
+    width: 100%;
     position: relative;
     transform: none !important;
     opacity: 1 !important;
