@@ -5,7 +5,8 @@
         right: 0;
         background-color: #030303;
         flex-direction: column;
-        width: 50%;
+        width: 75%;
+        height: 100px;
         display: none;
         padding: 10px 0;
         box-shadow: 0 4px 6px rgba(0,0,0,0.1);
@@ -43,5 +44,8 @@
 }
 .add-skill-section{
     width: 75%;
+}
+.dropdown a span{
+    font-size: 1rem;
 }
 }
