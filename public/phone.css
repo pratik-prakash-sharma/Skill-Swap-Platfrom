@@ -18,6 +18,9 @@
     .hamburger {
         display: block;
     }
+    .hero-title{
+        text-align: center;
+    }
     .primary-heading{
     font-size: 2rem;
 }
@@ -37,6 +40,8 @@
 }
 .profile-container{
     margin-top: 80px;
-   
+}
+.add-skill-section{
+    width: 75%;
 }
 }
