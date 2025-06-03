@@ -1,0 +1,42 @@
+@media only screen and (max-width: 600px) {
+.navlist {
+        position: absolute;
+        top: 70px;
+        right: 0;
+        background-color: #030303;
+        flex-direction: column;
+        width: 50%;
+        display: none;
+        padding: 10px 0;
+        box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    }
+
+    .navlist.show {
+        display: flex;
+    }
+
+    .hamburger {
+        display: block;
+    }
+    .primary-heading{
+    font-size: 2rem;
+}
+.primary-pera{
+    font-family: 1.2rem;
+}
+#hero-section{
+    height: 300px;
+}
+.skill-container{
+    gap: 25px;
+       margin: 30px auto;
+}
+.skill-card{
+        width: 240px;
+    height: 290px;
+}
+.profile-container{
+    margin-top: 80px;
+   
+}
+}

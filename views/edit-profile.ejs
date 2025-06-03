@@ -1,11 +1,49 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Edit Profile</title>
     <link rel="stylesheet" href="/style.css">
+    <link rel="stylesheet" href="/drop.css">
+    <link rel="stylesheet" href="/phone.css">
+    <style>
+        .nav-link{
+            color: white;
+        }
+
+        .nav-link:hover{
+            border: none;
+        }
+        .profile-card{
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            align-items: center;
+            margin-top: 50px;
+            width: 80%;
+            justify-self: center;
+            border: 2px solid #016e10;
+            padding: 10px 0;
+            border-radius: 20px;
+        }
+        .profile-card h1{
+            color: white;
+        }
+        .input{
+            width: 70%;
+            border: 2px solid gray;
+            border-radius: 12px;
+            height: 30px;
+            background: transparent;
+            color: white;
+            font-weight: bold;
+            padding: 5px 10px;
+        }
+    </style>
 </head>
+
 <body>
     <nav class="navbar">
         <a href="/profile" class="nav-link">⬅ Back to Profile</a>
@@ -14,11 +52,12 @@
     <div class="profile-container">
         <form method="POST" action="/profile/edit" class="profile-card">
             <h1>Edit Profile</h1>
-            <input type="text" name="name" value="<%= user.name %>" required />
-            <textarea name="bio" placeholder="Enter your bio"><%= user.bio || '' %></textarea>
+            <input class="input" type="text" name="name" value="<%= user.name %>" required />
+            <textarea class="input" name="bio" placeholder="Enter your bio"><%= user.bio || '' %></textarea>
             <!-- <input type="text" name="skills" value="<%= user.skills ? user.skills.join(', ') : '' %>" placeholder="Enter skills, separated by commas"> -->
             <button type="submit" class="btn">Save Changes</button>
         </form>
     </div>
 </body>
+
 </html>

@@ -8,6 +8,7 @@
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="profile.css">
     <link rel="stylesheet" href="drop.css">
+    <link rel="stylesheet" href="phone.css">
 </head>
 
 <body>
@@ -16,9 +17,15 @@
             <img class="logo-img" src="images/skill.png" alt="">
             <h2 class="logo-heading">Skill Swap</h2>
         </div>
-        <ul class="navlist">
+
+        <!-- Hamburger Button -->
+        <div class="hamburger" id="hamburger">
+            ☰
+        </div>
+
+        <!-- Nav List -->
+        <ul class="navlist" id="navlist">
             <li><a href="/home" class="nav-link btn2">Home</a></li>
-            <!-- <li><a href="/home/skills" class="nav-link">Explore Skills</a></li> -->
 
             <% if (user) { %>
                 <li class="dropdown">
@@ -26,6 +33,7 @@
                             <%= user.name %>
                         </span> ▼</a>
                     <ul class="dropdown-menu">
+                        <li><a href="/profile" class="dropdown-item">Profile</a></li>
                         <li>
                             <form method="POST" action="/user/logout" style="display:inline;">
                                 <button type="submit" class="dropdown-item logout-btn">Logout</button>
@@ -63,7 +71,7 @@
                 <a href="/profile/edit" class="btn">Edit Profile</a>
                 <a href="/profile/change-password" class="btn">Change Password</a>
             </div>
-           
+
         </div>
 
         <!-- <div class="add-skill-section">
@@ -94,7 +102,7 @@
                             <% }); %>
                     </ul>
                     <% } %>
-                     <a href="/profile/add-skill">Add Skill</a>
+                        <a href="/profile/add-skill">Add Skill</a>
         </div>
 
         <div class="requests-section">
@@ -141,42 +149,40 @@
                                             <form method="POST" action="/swap/respond">
                                                 <input type="hidden" name="requestId" value="<%= request._id %>">
                                                 <button type="submit" name="action" value="accept">✅ Accept</button>
-                                                <button type="submit" name="action" value="reject" onclick="deleteRequest('<%= request._id %>')">❌ Reject</button>
+                                                <button type="submit" name="action" value="reject"
+                                                    onclick="deleteRequest('<%= request._id %>')">❌ Reject</button>
                                             </form>
                                         </li>
                                         <% }); %>
-                                    </ul>
-                                    <% } %>
+                                </ul>
+                                <% } %>
                                     <form action="/swap/pending" method="GET">
                                         <button class="btn" type="submit" name="action" value="reject">Pending</button>
                                     </form>
-                            
+
         </div>
     </div>
-    <h1>Swapped Skills</h1>
-
-<ul>
-    <% swaps.forEach(swap => { %>
-        <li>
-            You swapped <%= swap.offeredSkill.name %> with 
-            <%= swap.requester.username %> for <%= swap.requestedSkill.name %>.
-        </li>
-    <% }); %>
-</ul>
 
 
-<script>
-    function deleteRequest(requestId) {
-        fetch(`/delete-request/${requestId}`, { method: "DELETE" })
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    location.reload();
-                }
-            })
-            .catch(error => console.error("Error deleting request:", error));
-    }
-</script>
+
+    <script>
+        const hamburger = document.getElementById('hamburger');
+        const navlist = document.getElementById('navlist');
+
+        hamburger.addEventListener('click', () => {
+            navlist.classList.toggle('show');
+        });
+        function deleteRequest(requestId) {
+            fetch(`/delete-request/${requestId}`, { method: "DELETE" })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        location.reload();
+                    }
+                })
+                .catch(error => console.error("Error deleting request:", error));
+        }
+    </script>
 
 </body>
 

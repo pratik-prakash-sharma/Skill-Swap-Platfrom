@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Verify OTP</title>
+    <link rel="stylesheet" href="/styles.css"> 
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 50px;
+            background: #f9f9f9;
+        }
+        .otp-box {
+            max-width: 400px;
+            margin: auto;
+            padding: 2rem;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        }
+        .otp-box h2 {
+            margin-bottom: 1.5rem;
+        }
+        .otp-box input {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 1rem;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+        }
+        .otp-box button {
+            width: 100%;
+            padding: 10px;
+            background: #28a745;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .otp-box button:hover {
+            background: #218838;
+        }
+    </style>
+</head>
+<body>
+    <div class="otp-box">
+        <h2>Verify Your Email</h2>
+        <form action="/verify-otp" method="POST">
+            <input type="hidden" name="email" value="<%= email %>">
+            <label for="otp">Enter the OTP sent to your email:</label>
+            <input type="text" name="otp" id="otp" placeholder="6-digit OTP" required>
+            <button type="submit">Verify</button>
+        </form>
+    </div>
+</body>
+</html>

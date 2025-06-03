@@ -10,6 +10,7 @@ const http = require("http");
 const socketIo = require("socket.io");
 const crypto = require("crypto");
 const nodemailer = require("nodemailer");
+const TempUser = require("./models/TempUser");
 // const twilio = require("twilio");
 require("dotenv").config();
 const User = require("./models/user.js");
@@ -54,7 +55,9 @@ mongoose.connect(process.env.MONGO_URI, { useNewUrlParser: true, useUnifiedTopol
     .then(() => console.log("MongoDB connected"))
     .catch(err => console.log(err));
 
-
+function generateOTP() {
+    return Math.floor(100000 + Math.random() * 900000).toString(); // 6-digit OTP
+}
 
 // app.get("/home", async (req, res)=>{
 //     const skills = await Skill.find();
@@ -78,44 +81,137 @@ const strongPasswordRegex = /^(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&
 // user registration
 
 
+// app.post("/user/register", async (req, res) => {
+//     try {
+//         let { name, username, email, mobile, password } = req.body;
+
+
+//         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+//         if (!emailRegex.test(email)) {
+//             return res.status(400).send('Invalid email address.');
+//         }
+
+//         // Check if username, email, or mobile number is already registered
+//         const existingUser = await User.findOne({ $or: [{ username }, { email }, { mobile }] });
+//         if (existingUser) {
+//             return res.send("Username, Email, or Mobile Number is already in use.");
+//         }
+
+//         // Enforce strong password
+//         if (!strongPasswordRegex.test(password)) {
+//             return res.send("Password must be at least 8 characters long, with 1 uppercase letter, 1 number, and 1 special character.");
+//         }
+
+//         // Hash password
+//         const hashedPassword = await bcrypt.hash(password, 10);
+
+//         // Create new user
+//         let newUser = new User({ name, username, email, mobile, password: hashedPassword });
+//         await newUser.save();
+
+//         res.redirect("/user");
+//     } catch (err) {
+//         if (err.code === 11000) {
+//             return res.send("This email or username is already registered. Please use a different one.");
+//         }
+//         console.log(err);
+//         res.send("Error registering user.");
+//     }
+// });
+
 app.post("/user/register", async (req, res) => {
     try {
         let { name, username, email, mobile, password } = req.body;
 
-
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        const strongPasswordRegex = /^(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
 
-        if (!emailRegex.test(email)) {
-            return res.status(400).send('Invalid email address.');
-        }
+        if (!emailRegex.test(email)) return res.status(400).send('Invalid email address.');
+        if (!strongPasswordRegex.test(password)) return res.status(400).send('Password not strong enough.');
 
-        // Check if username, email, or mobile number is already registered
         const existingUser = await User.findOne({ $or: [{ username }, { email }, { mobile }] });
-        if (existingUser) {
-            return res.send("Username, Email, or Mobile Number is already in use.");
-        }
+        if (existingUser) return res.send("Username, Email, or Mobile Number is already in use.");
 
-        // Enforce strong password
-        if (!strongPasswordRegex.test(password)) {
-            return res.send("Password must be at least 8 characters long, with 1 uppercase letter, 1 number, and 1 special character.");
-        }
+        await TempUser.deleteMany({ email })
 
-        // Hash password
+        const otp = generateOTP();
+        Object.freeze(otp);
+        console.log("Generated OTP:", otp);
+
+        const otpExpiresAt = new Date(Date.now() + 10 * 60 * 1000); // expires in 10 min
         const hashedPassword = await bcrypt.hash(password, 10);
 
-        // Create new user
-        let newUser = new User({ name, username, email, mobile, password: hashedPassword });
-        await newUser.save();
+        const transporter = nodemailer.createTransport({
+            service: "gmail",
+            auth: {
+                user: "pratikprakashsharma@gmail.com",
+                pass: "hjxh hyne ifjj nwky" // Use app password for Gmail
+            }
+        });
 
-        res.redirect("/user");
+        const mailOptions = {
+            from: "pratikprakashsharma@gmail.com",
+            to: email,
+            subject: "OTP for Account Verification",
+            text: `Your OTP is: ${otp}`
+        };
+
+        await transporter.sendMail(mailOptions);
+
+        // Save to TempUser collection
+        await TempUser.create({ name, username, email, mobile, password: hashedPassword, otp, otpExpiresAt });
+        console.log("Saved OTP to DB:", otp);
+        res.redirect(`/verify-otp?email=${email}`);
     } catch (err) {
-        if (err.code === 11000) {
-            return res.send("This email or username is already registered. Please use a different one.");
-        }
-        console.log(err);
-        res.send("Error registering user.");
+        console.error(err);
+        res.send("Error during registration.");
     }
 });
+
+// otp verification route 
+
+app.get("/verify-otp", (req, res) => {
+    const email = req.query.email;
+    res.render("verify-otp", { email });
+});
+
+
+app.post("/verify-otp", async (req, res) => {
+    const { email, otp } = req.body;
+
+    const tempUser = await TempUser.findOne({ email });
+    if (!tempUser) return res.send("OTP expired or user not found.");
+
+    // Log values for debugging
+    console.log("Entered OTP:", otp);
+    console.log("Stored OTP:", tempUser.otp);
+    console.log("Current time:", new Date());
+    console.log("Expires at:", tempUser.otpExpiresAt);
+
+    if (tempUser.otp !== otp) {
+        return res.send("Invalid OTP.");
+    }
+
+    if (new Date() > tempUser.otpExpiresAt) {
+        return res.send("OTP has expired.");
+    }
+
+    const newUser = new User({
+        name: tempUser.name,
+        username: tempUser.username,
+        email: tempUser.email,
+        mobile: tempUser.mobile,
+        password: tempUser.password
+    });
+
+    await newUser.save();
+    await TempUser.deleteOne({ email });
+
+    // res.send("Registration complete! You can now log in.");
+    res.redirect("/user")
+});
+
 
 
 // Login User
@@ -141,6 +237,10 @@ app.post("/user/login", async (req, res) => {
     // req.session.receivedRequests = receivedRequests; // Store in session
 
     res.redirect("/home");
+});
+app.get("/home", async (req, res) => {
+    const skills = await Skill.find().populate("user");
+    res.render("home.ejs", { user: req.session.user, skills });
 });
 
 
@@ -609,7 +709,7 @@ app.post("/swap/confirm/:id", async (req, res) => {
 // app.listen(8080, ()=>{
 //     console.log("server is running on port 8080");
 // }) imp
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 3001;
 app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);
 });

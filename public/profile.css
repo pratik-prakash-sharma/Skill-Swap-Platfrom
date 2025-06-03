@@ -87,3 +87,33 @@ body{
     border-radius: 12px;
     border: none;
 }
+@media only screen and (max-width: 600px) {
+    .profile-container{
+        display: flex;
+   width: 90%;
+    justify-content: space-between;
+    /* align-items: center; */
+    flex-direction: column;
+    /* height: 80vh; */
+    /* border: 2px solid red; */
+    margin: auto;
+    margin-top: 50px;
+    gap: 40px;
+    }
+    .name{
+        font-size: 2rem;
+    }
+    .user-skills{
+        width: 380px;
+    }
+    .requests-section{
+        text-align: center;
+    }
+    .requests-section h2{
+        font-size: 1.3rem;
+    }
+    .requests-section h3{
+        font-size: 1rem;
+    }
+}
+
