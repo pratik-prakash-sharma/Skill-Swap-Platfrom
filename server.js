@@ -456,8 +456,13 @@ app.get("/skill/:id", async (req, res) => {
     if (!skill.user) {
         skill.user = { name: "Unknown" };
     }
-
-    res.render("skill-details.ejs", { skill, user: req.session.user });
+const userSkills = await Skill.find({ _id: { $in: req.session.user.skills } });
+    // res.render("skill-details.ejs", { skill, user: req.session.user, title });
+    res.render("skill-details.ejs", {
+    skill,
+    user: req.session.user,
+    userSkills
+});
 });
 
 
@@ -482,26 +487,6 @@ app.post("/swap/request", async (req, res) => {
     res.redirect("/home");
 });
 
-// Handle Accept/Reject
-// app.post("/swap/respond", async (req, res) => {
-//     const { requestId, action } = req.body;
-//     const request = await SwapRequest.findById(requestId).populate("requester");
-
-//     if (!request) {
-//         return res.send("Swap request not found.");
-//     }
-
-//     if (action === "accept") {
-//         request.status = "accepted";
-//         io.emit(`swap-accepted-${request.requester._id}`, { message: "Your swap request was accepted!" });
-//     } else {
-//         request.status = "rejected";
-//         io.emit(`swap-rejected-${request.requester._id}`, { message: "Your swap request was rejected." });
-//     }
-
-//     await request.save();
-//     res.redirect("/requests");
-// });
 
 
 app.post("/swap/respond", async (req, res) => {
@@ -514,35 +499,7 @@ app.post("/swap/respond", async (req, res) => {
             return res.send("Swap request not found.");
         }
 
-        // if(action != "accept"){
-        //     app.post("/reject-request/:requestId", async (req, res) => {
-        //         try {
-        //             const requestId = req.params.requestId;
-        //             const swapRequest = await SwapRequest.findById(requestId);
-
-        //             if (!swapRequest) {
-        //                 return res.status(404).send("Request not found");
-        //             }
-
-        //             swapRequest.status = "rejected";
-        //             await swapRequest.save();
-
-        //             // Save notification for the requester
-        //             const notification = new Notification({
-        //                 user: swapRequest.requester, // The user who sent the swap request
-        //                 message: "Your swap request was rejected.",
-        //                 status: "unread",
-        //             });
-
-        //             await notification.save();
-
-        //             res.redirect("/swap-requests"); // Redirect back to requests page
-        //         } catch (error) {
-        //             console.error("Error rejecting swap request:", error);
-        //             res.status(500).send("Server Error");
-        //         }
-        //     });
-        // }
+        
         request.status = action === "accept" ? "accepted" : "rejected";
         await request.save();
 

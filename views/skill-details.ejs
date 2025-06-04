@@ -9,6 +9,10 @@
         body {
             color: white;
         }
+
+        a {
+            color: white;
+        }
     </style>
     <link rel="stylesheet" href="/style.css">
 </head>
@@ -34,9 +38,9 @@
                 <input type="hidden" name="skillId" value="<%= skill._id %>">
                 <label for="swapSkill">Select your skill to swap:</label>
                 <select name="swapSkill" required>
-                    <% user.skills.forEach(s=> { %>
-                        <option value="<%= s %>">
-                            <%= s %>
+                    <% userSkills.forEach(skill=> { %>
+                        <option value="<%= skill._id %>">
+                            <%= skill.title %>
                         </option>
                         <% }); %>
                 </select>
