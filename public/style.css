@@ -117,7 +117,7 @@ box-shadow: rgba(44, 187, 99, .2) 0 -25px 18px -14px inset,rgba(44, 187, 99, .15
 /* skill section */
 #skill-section{
    padding: 10px;
-   height: 100vh;
+   height: 100%;
 }
 #skill-section h1{
     color: white;
