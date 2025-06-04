@@ -132,6 +132,15 @@ box-shadow: rgba(44, 187, 99, .2) 0 -25px 18px -14px inset,rgba(44, 187, 99, .15
     flex-wrap: wrap;
     justify-content: center;
     align-items: center;
+
+}
+.skill-container-details{
+    display: flex;
+    flex-direction: column;
+    font-size: 1.2rem;
+    gap: 40px;
+    justify-content: center;
+    align-items: center;
 }
 .skill-card{
     position: relative;
