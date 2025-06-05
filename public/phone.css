@@ -42,8 +42,8 @@
     }
 
     .skill-card {
-        width: 240px;
-        height: 290px;
+        width: 179px;
+        height: 226px;
     }
 
     .profile-container {
@@ -66,17 +66,17 @@
     }
 
     .skill-card {
-        width: 200px;
-        height: 230px;
+        width: 181px;
+        height: 195px;
         /* Smaller height */
         position: relative;
     }
 
     .bg {
-        width: 194px;
-        height: 221px;
-        left: 0;
-        top: 0;
+        width: 175px;
+        height: 182px;
+        left: 3.5px;
+        top: 5px;
         position: absolute;
         z-index: 2;
         background: rgb(31, 31, 31);
@@ -106,7 +106,7 @@
     }
 
     .skill-name h2 {
-        font-size: 0.9rem;
+        font-size: 1rem;
     }
 
     .skill-desc {
