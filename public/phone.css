@@ -1,5 +1,5 @@
 @media only screen and (max-width: 600px) {
-.navlist {
+    .navlist {
         position: absolute;
         top: 70px;
         right: 0;
@@ -9,7 +9,7 @@
         height: 100px;
         display: none;
         padding: 10px 0;
-        box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     }
 
     .navlist.show {
@@ -19,33 +19,122 @@
     .hamburger {
         display: block;
     }
-    .hero-title{
+
+    .hero-title {
         text-align: center;
     }
-    .primary-heading{
-    font-size: 2rem;
-}
-.primary-pera{
-    font-family: 1.2rem;
-}
-#hero-section{
-    height: 300px;
-}
-.skill-container{
-    gap: 25px;
-       margin: 30px auto;
-}
-.skill-card{
+
+    .primary-heading {
+        font-size: 2rem;
+    }
+
+    .primary-pera {
+        font-family: 1.2rem;
+    }
+
+    #hero-section {
+        height: 300px;
+    }
+
+    .skill-container {
+        gap: 25px;
+        margin: 30px auto;
+    }
+
+    .skill-card {
         width: 240px;
-    height: 290px;
-}
-.profile-container{
-    margin-top: 80px;
-}
-.add-skill-section{
-    width: 75%;
-}
-.dropdown a span{
-    font-size: 1rem;
-}
+        height: 290px;
+    }
+
+    .profile-container {
+        margin-top: 80px;
+    }
+
+    .add-skill-section {
+        width: 75%;
+    }
+
+    .dropdown a span {
+        font-size: 1rem;
+    }
+
+    .skill-container {
+        flex-direction: row;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 16px;
+    }
+
+    .skill-card {
+        width: 200px;
+        height: 230px;
+        /* Smaller height */
+        position: relative;
+    }
+
+    .bg {
+        width: 194px;
+        height: 221px;
+        left: 0;
+        top: 0;
+        position: absolute;
+        z-index: 2;
+        background: rgb(31, 31, 31);
+        backdrop-filter: blur(18px);
+        border-radius: 10px;
+        outline: 2px solid white;
+    }
+
+    .card-detail {
+        width: 90%;
+        height: 90%;
+        z-index: 3;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        justify-content: space-between;
+        margin: auto;
+        padding: 5px;
+        align-items: center;
+    }
+
+    .skill-name {
+        width: 100%;
+        font-size: 0.9rem;
+        text-align: center;
+        color: white;
+    }
+
+    .skill-name h2 {
+        font-size: 0.9rem;
+    }
+
+    .skill-desc {
+        font-size: 0.75rem;
+        text-align: center;
+        color: rgb(141, 138, 138);
+    }
+
+    .btn {
+        font-size: 0.8rem;
+        padding: 6px 12px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .blob {
+        position: absolute;
+        z-index: 1;
+        top: 50%;
+        left: 50%;
+        width: 100px;
+        height: 100px;
+        border-radius: 50%;
+        background-color: #ff0000;
+        opacity: 1;
+        filter: blur(10px);
+        animation: blob-bounce 5s infinite ease;
+        transform: translate(-50%, -50%);
+    }
 }
